@@ -22,7 +22,9 @@ a:focus-visible{outline:2px solid #EDEDEA;outline-offset:3px;border-radius:4px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .textlink{color:#A3A39C;transition:color .15s cubic-bezier(.23,1,.32,1)}
 .ask{display:flex;flex-direction:column;gap:16px}
-.ask-log{height:156px;box-sizing:border-box;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;gap:16px;font-size:15px;line-height:1.6;overflow-wrap:anywhere;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 48px);mask-image:linear-gradient(to bottom,transparent 0,#000 48px)}
+.ask-log{height:156px;box-sizing:border-box;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;display:flex;flex-direction:column;gap:16px;font-size:15px;line-height:1.6;overflow-wrap:anywhere;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 48px);mask-image:linear-gradient(to bottom,transparent 0,#000 48px)}
+.ask-log::-webkit-scrollbar{display:none}
+.ask-log>:first-child{margin-top:auto}
 .ask-q{margin:0;color:#EDEDEA}
 .ask-a{margin:0;color:#A3A39C;white-space:pre-wrap}
 .ask-a span{animation:ask-in .25s cubic-bezier(.23,1,.32,1) both}
@@ -93,6 +95,9 @@ a:focus-visible{outline:2px solid #EDEDEA;outline-offset:3px;border-radius:4px}
   const log = document.getElementById("ask-log");
   const btn = form.querySelector("button");
   const history = [];
+  // Follow the answer only if the reader is within about one line of the bottom.
+  const nearBottom = () => log.scrollHeight - log.scrollTop - log.clientHeight < 28;
+  const toBottom = () => { log.scrollTop = log.scrollHeight; };
   const line = (cls, text) => {
     const p = document.createElement("p");
     p.className = cls;
@@ -101,9 +106,11 @@ a:focus-visible{outline:2px solid #EDEDEA;outline-offset:3px;border-radius:4px}
     return p;
   };
   const append = (el, text) => {
+    const follow = nearBottom();
     const s = document.createElement("span");
     s.textContent = text;
     el.appendChild(s);
+    if (follow) toBottom();
   };
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -113,6 +120,7 @@ a:focus-visible{outline:2px solid #EDEDEA;outline-offset:3px;border-radius:4px}
     btn.disabled = true;
     line("ask-q", q);
     const a = line("ask-a typing");
+    toBottom();
     history.push({ role: "user", content: q });
     let full = "";
     try {

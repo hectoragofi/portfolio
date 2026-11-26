@@ -62,16 +62,42 @@ export default {
     }
 
     try {
-      const out = await env.AI.run(MODEL, {
+      const sse = await env.AI.run(MODEL, {
         messages: [{ role: "system", content: SYSTEM }, ...messages],
         max_tokens: 300,
         temperature: 0.3,
+        stream: true,
         // Gemma 4 reasons by default and burns the whole budget on it.
         chat_template_kwargs: { enable_thinking: false },
       });
-      const reply =
-        out?.choices?.[0]?.message?.content ?? out?.response ?? "";
-      return json({ reply: String(reply).trim() || "I don't know that one. Try emailing Hector." }, 200, origin);
+      // Turn the model's SSE stream into a plain-text stream of answer tokens.
+      const enc = new TextEncoder();
+      const dec = new TextDecoder();
+      let buf = "";
+      const toText = new TransformStream({
+        transform(chunk, ctrl) {
+          buf += dec.decode(chunk, { stream: true });
+          const lines = buf.split("\n");
+          buf = lines.pop();
+          for (const line of lines) {
+            if (!line.startsWith("data:")) continue;
+            const data = line.slice(5).trim();
+            if (!data || data === "[DONE]") continue;
+            try {
+              const j = JSON.parse(data);
+              const piece = j?.choices?.[0]?.delta?.content ?? j?.response ?? "";
+              if (piece) ctrl.enqueue(enc.encode(piece));
+            } catch {}
+          }
+        },
+      });
+      return new Response(sse.pipeThrough(toText), {
+        headers: {
+          "Content-Type": "text/plain; charset=utf-8",
+          "Cache-Control": "no-store",
+          ...cors(origin),
+        },
+      });
     } catch (err) {
       // Free plan: daily neuron cap reached -> AI.run throws. Nothing is billed.
       console.log("ai error", String(err));

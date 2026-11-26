@@ -19,10 +19,17 @@ a:focus-visible{outline:2px solid #EDEDEA;outline-offset:3px;border-radius:4px}
 @media (prefers-reduced-motion:reduce){.row-title{transform:none!important;transition:none}.row-title::after{transform:none;transition:none}}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .ask{display:flex;flex-direction:column;gap:16px}
-.ask-log{display:flex;flex-direction:column;gap:12px;font-size:15px;line-height:1.6}
+.ask-log{display:flex;flex-direction:column;gap:14px;font-size:15px;line-height:1.6;max-height:260px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;padding-top:4px}
+.ask-log::-webkit-scrollbar{display:none}
 .ask-log:empty{display:none}
-.ask-q{color:#EDEDEA;margin:0}
-.ask-a{color:#A3A39C;margin:0}
+.ask-log.faded{-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 72px);mask-image:linear-gradient(to bottom,transparent 0,#000 72px)}
+.ask-q{align-self:flex-end;max-width:85%;margin:0;padding:6px 14px;border-radius:18px;background:#1E1E1C;color:#EDEDEA}
+.ask-a{margin:0;color:#A3A39C;white-space:pre-wrap}
+.ask-a span{animation:ask-in .35s cubic-bezier(.23,1,.32,1) both}
+.ask-a.typing::after{content:"";display:inline-block;width:6px;height:6px;margin-left:4px;border-radius:50%;background:#6B6B66;vertical-align:middle;animation:ask-pulse 1s ease-in-out infinite}
+@keyframes ask-in{from{opacity:0;filter:blur(2px)}to{opacity:1;filter:none}}
+@keyframes ask-pulse{50%{opacity:.3}}
+@media (prefers-reduced-motion:reduce){.ask-a span{animation:none}.ask-a.typing::after{animation:none}}
 .ask-form{display:flex;align-items:center;gap:8px;border-bottom:1px solid #2E2E2B;transition:border-color .2s}
 .ask-form:focus-within{border-color:#A3A39C}
 .ask-form input{flex:1;min-width:0;min-height:44px;background:none;border:0;outline:0;color:#EDEDEA;font:inherit;font-size:16px}
@@ -84,12 +91,25 @@ a:focus-visible{outline:2px solid #EDEDEA;outline-offset:3px;border-radius:4px}
   const log = document.getElementById("ask-log");
   const btn = form.querySelector("button");
   const history = [];
+  // Follow the answer only if the reader is within about one line of the bottom.
+  const nearBottom = () => log.scrollHeight - log.scrollTop - log.clientHeight < 28;
+  const toBottom = () => { log.scrollTop = log.scrollHeight; };
+  const fade = () => log.classList.toggle("faded", log.scrollTop > 2);
+  log.addEventListener("scroll", fade, { passive: true });
   const line = (cls, text) => {
     const p = document.createElement("p");
     p.className = cls;
-    p.textContent = text;
+    if (text) p.textContent = text;
     log.appendChild(p);
     return p;
+  };
+  const append = (el, text) => {
+    const follow = nearBottom();
+    const s = document.createElement("span");
+    s.textContent = text;
+    el.appendChild(s);
+    if (follow) toBottom();
+    fade();
   };
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -98,22 +118,40 @@ a:focus-visible{outline:2px solid #EDEDEA;outline-offset:3px;border-radius:4px}
     input.value = "";
     btn.disabled = true;
     line("ask-q", q);
-    const a = line("ask-a", "…");
+    const a = line("ask-a typing");
+    toBottom();
+    fade();
     history.push({ role: "user", content: q });
+    let full = "";
     try {
       const r = await fetch(API, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: history.slice(-6) }),
       });
-      const j = await r.json();
-      a.textContent = j.reply || "Something went wrong. Try again later.";
-      if (r.ok) history.push({ role: "assistant", content: a.textContent });
-      else history.pop();
+      if (!r.ok || !(r.headers.get("Content-Type") || "").startsWith("text/plain")) {
+        const j = await r.json().catch(() => ({}));
+        append(a, j.reply || "Something went wrong. Try again later.");
+        history.pop();
+      } else {
+        const reader = r.body.getReader();
+        const dec = new TextDecoder();
+        for (;;) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          const t = dec.decode(value, { stream: true });
+          if (!t) continue;
+          full += t;
+          append(a, full === t ? t.replace(/^\s+/, "") : t);
+        }
+        if (!full.trim()) append(a, "I don't know that one. Try emailing Hector.");
+        else history.push({ role: "assistant", content: full.trim() });
+      }
     } catch {
-      a.textContent = "Couldn't reach the assistant. Try again later.";
+      if (!full) append(a, "Couldn't reach the assistant. Try again later.");
       history.pop();
     }
+    a.classList.remove("typing");
     btn.disabled = false;
     input.focus();
   });

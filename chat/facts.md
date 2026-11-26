@@ -7,6 +7,12 @@ Only public facts. Everything here can be quoted to any visitor.
 - Builds software: AI agents, local/low-level LLM inference, Rust desktop tools, Android apps.
 - Contact: email hectoragofi@gmail.com, GitHub github.com/hectoragofi, X x.com/hectoragofi, LinkedIn (linked on the site).
 
+## Headline
+- "Aspiring software developer and engineer."
+
+## Experience
+- Game Development Intern at Couch Heroes, July 2024 (1 month), remote.
+
 ## Languages
 - English, Greek and Spanish, all at native or bilingual level.
 
@@ -15,7 +21,6 @@ Only public facts. Everything here can be quoted to any visitor.
 - St Catherine's British School, Athens, Greece: IGCSE and IB Diploma, September 2022 to May 2025.
   - IB Higher Level: Mathematics Analysis and Approaches, Computer Science, Physics.
   - IB Standard Level: English Language and Literature, Economics, Greek Language and Literature.
-- Skills listed on LinkedIn include project management and software development.
 
 ## Working on right now
 - Ari (textari.tech): a personal AI assistant you text with. It can read the web, act in a browser and keep track of things for you.
@@ -33,5 +38,6 @@ Only public facts. Everything here can be quoted to any visitor.
 - opencode-chat: ChatGPT-style desktop chat on opencode with free models and document creation.
 - pequalnp-proofs: Lean 4 proofs from a public AI attempt at P vs NP.
 
-## Skills seen in his projects
-Rust, TypeScript, Kotlin, Python, Lean 4, llama.cpp, Cloudflare Workers, LLM agents and tooling, UEFI/low-level systems.
+## Skills
+- From his projects: Rust, TypeScript, Kotlin, Python, Lean 4, llama.cpp, Cloudflare Workers, LLM agents and tooling, UEFI/low-level systems.
+- Listed on LinkedIn: project management, software development, team leadership, problem solving, Python (Flask, Tkinter), C#, Java, Go, HTML, JavaScript, Android development (Android Studio), Unity, Unreal Engine 4, Linux/GNU-Linux, Windows.

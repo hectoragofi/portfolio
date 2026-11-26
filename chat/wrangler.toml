@@ -1,0 +1,22 @@
+name = "portfolio-chat"
+main = "src/index.js"
+compatibility_date = "2026-11-01"
+workers_dev = true
+
+[[rules]]
+type = "Text"
+globs = ["**/*.md"]
+fallthrough = true
+
+[ai]
+binding = "AI"
+
+# Per-IP limit. The Workers Free plan also hard-stops Workers AI at
+# 10k neurons/day (requests error, nothing is billed).
+[[ratelimits]]
+name = "PER_IP"
+namespace_id = "7301"
+
+  [ratelimits.simple]
+  limit = 6
+  period = 60

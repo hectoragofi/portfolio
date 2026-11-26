@@ -17,6 +17,19 @@ a:focus-visible{outline:2px solid #EDEDEA;outline-offset:3px;border-radius:4px}
 .row:hover .row-title::after{opacity:1;transform:none}
 }
 @media (prefers-reduced-motion:reduce){.row-title{transform:none!important;transition:none}.row-title::after{transform:none;transition:none}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.ask{display:flex;flex-direction:column;gap:16px}
+.ask-log{display:flex;flex-direction:column;gap:12px;font-size:15px;line-height:1.6}
+.ask-log:empty{display:none}
+.ask-q{color:#EDEDEA;margin:0}
+.ask-a{color:#A3A39C;margin:0}
+.ask-form{display:flex;align-items:center;gap:8px;border-bottom:1px solid #2E2E2B;transition:border-color .2s}
+.ask-form:focus-within{border-color:#A3A39C}
+.ask-form input{flex:1;min-width:0;min-height:44px;background:none;border:0;outline:0;color:#EDEDEA;font:inherit;font-size:16px}
+.ask-form input::placeholder{color:#6B6B66}
+.ask-form button{min-width:44px;min-height:44px;background:none;border:0;color:#A3A39C;font:inherit;font-size:18px;cursor:pointer}
+.ask-form button:disabled{opacity:.4;cursor:default}
+.ask-form button:focus-visible{outline:2px solid #EDEDEA;outline-offset:2px;border-radius:4px}
 </style>
 </head>
 <body>
@@ -44,6 +57,15 @@ a:focus-visible{outline:2px solid #EDEDEA;outline-offset:3px;border-radius:4px}
       </a>
     </nav>
 
+    <section aria-label="Ask about me" class="ask">
+      <div id="ask-log" class="ask-log" aria-live="polite"></div>
+      <form id="ask-form" class="ask-form" autocomplete="off">
+        <label for="ask-input" class="sr">Ask a question about me</label>
+        <input id="ask-input" name="q" type="text" maxlength="500" placeholder="Ask me anything about my work…" required>
+        <button type="submit" aria-label="Send">↵</button>
+      </form>
+    </section>
+
   </main>
 
   <footer style="width: 100%; max-width: 560px; margin: 0 auto; padding-top: 32px; display: flex; gap: 24px; flex-wrap: wrap; font-size: 15px;">
@@ -54,5 +76,48 @@ a:focus-visible{outline:2px solid #EDEDEA;outline-offset:3px;border-radius:4px}
   </footer>
 
 </div>
+<script>
+(() => {
+  const API = "https://portfolio-chat.hectoragofi.workers.dev";
+  const form = document.getElementById("ask-form");
+  const input = document.getElementById("ask-input");
+  const log = document.getElementById("ask-log");
+  const btn = form.querySelector("button");
+  const history = [];
+  const line = (cls, text) => {
+    const p = document.createElement("p");
+    p.className = cls;
+    p.textContent = text;
+    log.appendChild(p);
+    return p;
+  };
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const q = input.value.trim();
+    if (!q || btn.disabled) return;
+    input.value = "";
+    btn.disabled = true;
+    line("ask-q", q);
+    const a = line("ask-a", "…");
+    history.push({ role: "user", content: q });
+    try {
+      const r = await fetch(API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: history.slice(-6) }),
+      });
+      const j = await r.json();
+      a.textContent = j.reply || "Something went wrong. Try again later.";
+      if (r.ok) history.push({ role: "assistant", content: a.textContent });
+      else history.pop();
+    } catch {
+      a.textContent = "Couldn't reach the assistant. Try again later.";
+      history.pop();
+    }
+    btn.disabled = false;
+    input.focus();
+  });
+})();
+</script>
 </body>
 </html>

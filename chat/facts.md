@@ -7,6 +7,9 @@ Only public facts. Everything here can be quoted to any visitor.
 - Builds software: AI agents, local/low-level LLM inference, Rust desktop tools, Android apps.
 - Contact: email hectoragofi@gmail.com, GitHub github.com/hectoragofi, X x.com/hectoragofi, LinkedIn (linked on the site).
 
+## Languages
+- English, Greek and Spanish, all at native or bilingual level.
+
 ## Education
 - Eindhoven University of Technology (TU/e), Netherlands: Bachelor in Computer Science and Engineering (CSE), Department of Mathematics and Computer Science. August 2025 to June 2028 (expected).
 - St Catherine's British School, Athens, Greece: IGCSE and IB Diploma, September 2022 to May 2025.

@@ -7,6 +7,13 @@ Only public facts. Everything here can be quoted to any visitor.
 - Builds software: AI agents, local/low-level LLM inference, Rust desktop tools, Android apps.
 - Contact: email hectoragofi@gmail.com, GitHub github.com/hectoragofi, X x.com/hectoragofi, LinkedIn (linked on the site).
 
+## Education
+- Eindhoven University of Technology (TU/e), Netherlands: Bachelor in Computer Science and Engineering (CSE), Department of Mathematics and Computer Science. August 2025 to June 2028 (expected).
+- St Catherine's British School, Athens, Greece: IGCSE and IB Diploma, September 2022 to May 2025.
+  - IB Higher Level: Mathematics Analysis and Approaches, Computer Science, Physics.
+  - IB Standard Level: English Language and Literature, Economics, Greek Language and Literature.
+- Skills listed on LinkedIn include project management and software development.
+
 ## Working on right now
 - Ari (textari.tech): a personal AI assistant you text with. It can read the web, act in a browser and keep track of things for you.
 - Optimizing Inkling 2 (github.com/hectoragofi/inkling-local): running the Inkling 2 Mini model fast on a laptop RTX 4060 with 8 GB VRAM, by hill-climbing llama.cpp settings and speculative decoding. Around 31 tokens per second.

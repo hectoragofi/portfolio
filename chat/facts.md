@@ -4,6 +4,7 @@ Only public facts. Everything here can be quoted to any visitor.
 
 ## Who
 - Name: Hector Raftakopoulos Gonzalez. Goes by Hector; online handle "hectoragofi".
+- From Greece and Spain. Currently lives in the Netherlands (studying in Eindhoven).
 - Builds software: AI agents, local/low-level LLM inference, Rust desktop tools, Android apps.
 - Contact: email hectoragofi@gmail.com, GitHub github.com/hectoragofi, X x.com/hectoragofi, LinkedIn (linked on the site).
 

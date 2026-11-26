@@ -2,49 +2,53 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Portfolio Home</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;family=Space+Grotesk:wght@500;600&amp;display=swap">
 <style>
 body{margin:0;background:#111110}
+html{-webkit-tap-highlight-color:transparent}
+a,button{touch-action:manipulation}
 a:focus-visible{outline:2px solid #EDEDEA;outline-offset:3px;border-radius:4px}
-.row-title{display:inline-block;transition:transform .25s cubic-bezier(.23,1,.32,1)}
-.row-title::after{content:"↗";content:"↗" / "";display:inline-block;margin-left:8px;font-family:Inter,system-ui,sans-serif;font-size:.75em;font-weight:400;color:#A3A39C;opacity:0;transform:translateX(-4px);transition:opacity .2s cubic-bezier(.23,1,.32,1),transform .2s cubic-bezier(.23,1,.32,1)}
+.row-title{display:inline-block;line-height:24px;transform-origin:left center;transition:transform .25s cubic-bezier(.23,1,.32,1)}
+.row-title::after{content:"↗";content:"↗" / "";display:inline-block;margin-left:8px;font-family:Inter,system-ui,sans-serif;font-size:.75em;font-weight:400;line-height:1;color:#A3A39C;opacity:0;transform:translateX(-4px);transition:opacity .2s cubic-bezier(.23,1,.32,1),transform .2s cubic-bezier(.23,1,.32,1)}
 .row:focus-visible .row-title{transform:translateX(4px)}
 .row:focus-visible .row-title::after{opacity:1;transform:none}
 @media (hover:hover) and (pointer:fine){
 .row:hover .row-title{transform:translateX(4px)}
 .row:hover .row-title::after{opacity:1;transform:none}
 }
-@media (prefers-reduced-motion:reduce){.row-title{transform:none!important;transition:none}.row-title::after{transform:none;transition:none}}
+.row:active .row-title{transform:translateX(4px) scale(.98)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.textlink{color:#A3A39C;transition:color .15s cubic-bezier(.23,1,.32,1)}
 .ask{display:flex;flex-direction:column;gap:16px}
-.ask-log{display:flex;flex-direction:column;gap:14px;font-size:15px;line-height:1.6;max-height:260px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;padding-top:4px}
+.ask-log{height:156px;box-sizing:border-box;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;display:flex;flex-direction:column;gap:16px;font-size:15px;line-height:1.6;overflow-wrap:anywhere;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 48px);mask-image:linear-gradient(to bottom,transparent 0,#000 48px)}
 .ask-log::-webkit-scrollbar{display:none}
-.ask-log:empty{display:none}
-.ask-log.faded{-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 72px);mask-image:linear-gradient(to bottom,transparent 0,#000 72px)}
-.ask-q{align-self:flex-end;max-width:85%;margin:0;padding:6px 14px;border-radius:18px;background:#1E1E1C;color:#EDEDEA}
+.ask-log>:first-child{margin-top:auto}
+.ask-q{margin:0;color:#EDEDEA}
 .ask-a{margin:0;color:#A3A39C;white-space:pre-wrap}
-.ask-a span{animation:ask-in .35s cubic-bezier(.23,1,.32,1) both}
+.ask-a span{animation:ask-in .25s cubic-bezier(.23,1,.32,1) both}
 .ask-a.typing::after{content:"";display:inline-block;width:6px;height:6px;margin-left:4px;border-radius:50%;background:#6B6B66;vertical-align:middle;animation:ask-pulse 1s ease-in-out infinite}
 @keyframes ask-in{from{opacity:0;filter:blur(2px)}to{opacity:1;filter:none}}
 @keyframes ask-pulse{50%{opacity:.3}}
-@media (prefers-reduced-motion:reduce){.ask-a span{animation:none}.ask-a.typing::after{animation:none}}
-.ask-form{display:flex;align-items:center;gap:8px;border-bottom:1px solid #2E2E2B;transition:border-color .2s}
+.ask-form{display:flex;align-items:center;gap:8px;border-bottom:1px solid #2E2E2B;transition:border-color .2s cubic-bezier(.23,1,.32,1)}
 .ask-form:focus-within{border-color:#A3A39C}
-.ask-form input{flex:1;min-width:0;min-height:44px;background:none;border:0;outline:0;color:#EDEDEA;font:inherit;font-size:16px}
-.ask-form input::placeholder{color:#6B6B66}
-.ask-form button{min-width:44px;min-height:44px;background:none;border:0;color:#A3A39C;font:inherit;font-size:18px;cursor:pointer}
+.ask-form input{flex:1;min-width:0;min-height:48px;padding:0;background:none;border:0;outline:0;color:#EDEDEA;font:inherit;font-size:16px}
+.ask-form input::placeholder{color:#8A8A84}
+.ask-form button{min-width:48px;min-height:48px;background:none;border:0;color:#A3A39C;font:inherit;font-size:18px;cursor:pointer;user-select:none;-webkit-user-select:none;transition:transform .16s cubic-bezier(.23,1,.32,1),color .15s cubic-bezier(.23,1,.32,1)}
+.ask-form button:active{transform:scale(.95)}
 .ask-form button:disabled{opacity:.4;cursor:default}
 .ask-form button:focus-visible{outline:2px solid #EDEDEA;outline-offset:2px;border-radius:4px}
+@media (hover:hover) and (pointer:fine){.ask-form button:hover{color:#EDEDEA}.textlink:hover{color:#EDEDEA}}
+@media (prefers-reduced-motion:reduce){.row-title{transform:none!important;transition:none}.row-title::after{transform:none;transition:none}.ask-form button:active{transform:none!important}.ask-a span{animation:none}.ask-a.typing::after{animation:none}}
 </style>
 </head>
 <body>
-<div style="min-height: 900px; box-sizing: border-box; padding: 48px 24px; display: flex; flex-direction: column; justify-content: center; background: #111110; color: #EDEDEA; font-family: Inter, system-ui, sans-serif;">
+<div style="min-height: 100dvh; box-sizing: border-box; padding: 48px 24px; display: flex; flex-direction: column; background: #111110; color: #EDEDEA; font-family: Inter, system-ui, sans-serif;">
 
-  <main style="width: 100%; max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px;">
+  <main style="width: 100%; max-width: 560px; margin: 0 auto; flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 40px;">
 
-    <p style="margin: 0; font-size: 16px; line-height: 1.6; color: #A3A39C;">Here's what I'm working on right now:</p>
+    <p style="margin: 0; font-size: 16px; line-height: 24px; color: #A3A39C;">Here's what I'm working on right now:</p>
 
     <nav aria-label="Projects" style="display: flex; flex-direction: column;">
       <a class="row" href="https://textari.tech" target="_blank" rel="noopener" style="display: flex; flex-direction: column; gap: 4px; padding: 12px 0; color: inherit; text-decoration: none;">
@@ -75,11 +79,11 @@ a:focus-visible{outline:2px solid #EDEDEA;outline-offset:3px;border-radius:4px}
 
   </main>
 
-  <footer style="width: 100%; max-width: 560px; margin: 0 auto; padding-top: 32px; display: flex; gap: 24px; flex-wrap: wrap; font-size: 15px;">
-    <a class="textlink" href="mailto:hectoragofi@gmail.com" style="display: inline-flex; align-items: center; min-height: 44px; color: #A3A39C; text-decoration: none;">hectoragofi@gmail.com</a>
-    <a class="textlink" href="https://github.com/hectoragofi" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; min-height: 44px; color: #A3A39C; text-decoration: none;">GitHub</a>
-    <a class="textlink" href="https://www.linkedin.com/in/hector-raftakopoulos-gonzalez-4bb1102b9/" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; min-height: 44px; color: #A3A39C; text-decoration: none;">LinkedIn</a>
-    <a class="textlink" href="https://x.com/hectoragofi" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; min-height: 44px; color: #A3A39C; text-decoration: none;">X</a>
+  <footer style="width: 100%; max-width: 560px; margin: 0 auto; padding-top: 32px; display: flex; gap: 0 24px; flex-wrap: wrap; font-size: 15px;">
+    <a class="textlink" href="mailto:hectoragofi@gmail.com" style="display: inline-flex; align-items: center; min-height: 48px; text-decoration: none;">hectoragofi@gmail.com</a>
+    <a class="textlink" href="https://github.com/hectoragofi" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; min-height: 48px; text-decoration: none;">GitHub</a>
+    <a class="textlink" href="https://www.linkedin.com/in/hector-raftakopoulos-gonzalez-4bb1102b9/" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; min-height: 48px; text-decoration: none;">LinkedIn</a>
+    <a class="textlink" href="https://x.com/hectoragofi" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; min-height: 48px; text-decoration: none;">X</a>
   </footer>
 
 </div>
@@ -94,8 +98,6 @@ a:focus-visible{outline:2px solid #EDEDEA;outline-offset:3px;border-radius:4px}
   // Follow the answer only if the reader is within about one line of the bottom.
   const nearBottom = () => log.scrollHeight - log.scrollTop - log.clientHeight < 28;
   const toBottom = () => { log.scrollTop = log.scrollHeight; };
-  const fade = () => log.classList.toggle("faded", log.scrollTop > 2);
-  log.addEventListener("scroll", fade, { passive: true });
   const line = (cls, text) => {
     const p = document.createElement("p");
     p.className = cls;
@@ -109,7 +111,6 @@ a:focus-visible{outline:2px solid #EDEDEA;outline-offset:3px;border-radius:4px}
     s.textContent = text;
     el.appendChild(s);
     if (follow) toBottom();
-    fade();
   };
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -120,7 +121,6 @@ a:focus-visible{outline:2px solid #EDEDEA;outline-offset:3px;border-radius:4px}
     line("ask-q", q);
     const a = line("ask-a typing");
     toBottom();
-    fade();
     history.push({ role: "user", content: q });
     let full = "";
     try {
